@@ -1,0 +1,8 @@
+<div class="flex justify-between items-center p-4">
+  <a [routerLink]="['/']">🏠🎉 HP</a>
+  <div class="flex items-center gap-4">
+    <a routerLink="/notifications">🔔</a>
+    <a routerLink="/messages">✉️</a>
+    <a (click)="logout()" class="cursor-pointer">{{ profile?.firstName }}</a>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div
+  class="flex justify-between items-center fixed p-4 h-16 w-full bg-white border-b border-b-neutral-200"
+>
+  <button appButton round="true" size="sm" (click)="close.emit()">X</button>
+  <button
+    appButton
+    showBorder="false"
+    size="sm"
+    (click)="selectedDate = undefined"
+  >
+    {{ "clear" | uppercase }}
+  </button>
+</div>
+<div class="flex flex-col overflow-auto h-[calc(100%-64px)] mt-16">
+  <div class="flex flex-col overflow-auto p-4">
+    <ng-container *ngFor="let visibleMonth of visibleMonths">
+      <div>
+        {{
+          getDateFromMonthAndYear(visibleMonth.month, visibleMonth.year)
+            | date : "MMMM yyyy"
+        }}
+      </div>
+      <app-calendar-month-view
+        [month]="visibleMonth.month"
+        [year]="visibleMonth.year"
+        (selectDate)="selectDate($event)"
+        [selectedDate]="selectedDate"
+      ></app-calendar-month-view>
+    </ng-container>
+  </div>
+  <div
+    class="flex flex-col items-center w-full border-t gap-2 border-neutral-200 shadow-[0_-1px_3px_0_rgb(0,0,0,0.1),_0_-1px_2px_-1px_rgb(0,0,0,0.1)]"
+    *ngIf="selectedDate"
+  >
+    <div class="h-[120px] relative w-full border-b border-neutral-200">
+      <div
+        class="h-full overflow-y-auto w-full text-center py-12 snap-y snap-mandatory relative"
+        id="timePicker"
+      >
+        <div class="snap-center h-8 leading-[32px] text-lg z-40 relative" *ngFor="let time of visibleTimes">
+          {{ time.hour % 12 == 0 ? 12 : (time.hour % 12 | number : "2.0") }}:{{
+            time.minute | number : "2.0"
+          }}
+          {{ time.hour < 12 ? "AM" : "PM" }}
+        </div>
+      </div>
+      <div
+        class="absolute bg-neutral-200/50 w-full left-0 top-1/2 h-8 -translate-y-1/2 transform z-10"
+      ></div>
+    </div>
+    <div class="flex gap-4 justify-between items-center w-full px-4">
+      <label for="createDateTimeTimeZone">Time Zone</label>
+      <input class="w-10 px-2 border border-neutral-200" id="createDateTimeTimeZone" type="text" [value]="getTimeZone()" />
+    </div>
+    <button appButton inverted="true" class="w-full rounded-none" (click)="onSubmit()">Done</button>
+  </div>
+</div>

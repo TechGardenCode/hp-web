@@ -1,0 +1,119 @@
+<form
+  [formGroup]="partyForm"
+  [ngClass]="{
+    'overflow-y-hidden': dateTimePickerVisible,
+    'overflow-y-auto': !dateTimePickerVisible
+  }"
+>
+  <app-header></app-header>
+  <div class="flex flex-col px-4 min-h-[calc(100vh-56px-128px)] mb-4 relative">
+    <div
+      class="fixed top-0 left-0 w-full h-full bg-white z-40"
+      *ngIf="dateTimePickerVisible"
+    >
+      <app-event-create-date-time-picker
+        [startDate]="today"
+        [selectedDate]="selectedDate"
+        (close)="dateTimePickerVisible = false"
+        (submit)="onDateTimeSelected($event)"
+      ></app-event-create-date-time-picker>
+    </div>
+    <div class="w-full p-2 flex flex-col gap-2 bg-black/5 backdrop-blur-md">
+      <input
+        class="w-full px-2 text-4xl leading-12 h-12"
+        type="text"
+        formControlName="title"
+        required
+        placeholder="Event title..."
+      />
+      <div class="px-4 -mx-2 pb-2 -mb-2 flex gap-2 overflow-auto items-center">
+        <button appButton size="sm" inverted="true">Default</button>
+        <button appButton size="sm" inverted="true">Classic</button>
+        <button appButton size="sm" inverted="true">Eccentric</button>
+        <button appButton size="sm" inverted="true">Spooky</button>
+      </div>
+    </div>
+    <div class="my-2 w-[calc(100lvw-32px)] h-[calc(100lvw-32px)] p-2 relative">
+      <div class="absolute w-full h-full p-2 top-0 left-0 animate-pulse -z-10">
+        <div class="bg-gray-400 w-full h-full"></div>
+      </div>
+      <img [src]="imageUrl" class="w-full object-cover" />
+    </div>
+    <div
+      class="w-full p-2 bg-black/5 backdrop-blur-md mb-4"
+      (click)="dateTimePickerVisible = true"
+    >
+      <div class="w-full text-2xl leading-8 h-8" *ngIf="!selectedDate">
+        Set a date...
+      </div>
+      <div class="w-full" *ngIf="selectedDate">
+        <div class="text-2xl leading-8">
+          {{ selectedDate | date : "EEEE, MMMM d" }}
+        </div>
+        <div class="text-xl text-neutral-500">
+          {{ selectedDate.getTime() | date : "h:mm a" }}
+        </div>
+      </div>
+    </div>
+    <div class="flex flex-col gap-px mb-4">
+      <div class="flex p-2 bg-black/5 backdrop-blur-md">
+        <label>Hosted by</label>
+        <input
+          class="grow px-1 focus:outline-0 placeholder:text-secondary"
+          type="text"
+          formControlName="hostNickname"
+          placeholder="(optional) nickname"
+        />
+      </div>
+      <div class="flex p-2 bg-black/5 backdrop-blur-md">
+        <label>Location</label>
+        <input
+          class="grow px-1 focus:outline-0 placeholder:text-secondary"
+          formControlName="location"
+          type="text"
+          placeholder="Event location..."
+        />
+      </div>
+      <div class="flex p-2 bg-black/5 backdrop-blur-md">
+        <label>Spots</label>
+        <input
+          class="grow px-1 focus:outline-0 placeholder:text-secondary"
+          type="text"
+          formControlName="spots"
+          placeholder="Leave blank for unlimited spots"
+        />
+      </div>
+    </div>
+    <div class="flex p-2 bg-black/5 backdrop-blur-md">
+      <textarea
+        class="grow focus:outline-0 placeholder:text-secondary min-h-24"
+        rows="4"
+        formControlName="description"
+        placeholder="Event description..."
+      ></textarea>
+    </div>
+  </div>
+</form>
+<div
+  class="sticky bottom-0 flex flex-col bg-white p-3 gap-2 shadow-[0_-1px_3px_0_rgb(0,0,0,0.1),_0_-1px_2px_-1px_rgb(0,0,0,0.1)]"
+>
+  <div class="flex justify-around items-center">
+    <div class="flex flex-col items-center">
+      <div class="w-8 h-8 rounded-full bg-gray-400 mb-1"></div>
+      <div class="text-xs text-secondary">Preview</div>
+    </div>
+    <div class="flex flex-col items-center">
+      <div class="w-8 h-8 rounded-full bg-gray-400 mb-1"></div>
+      <div class="text-xs text-secondary">Preview</div>
+    </div>
+    <div class="flex flex-col items-center">
+      <div class="w-8 h-8 rounded-full bg-gray-400 mb-1"></div>
+      <div class="text-xs text-secondary">Preview</div>
+    </div>
+    <div class="flex flex-col items-center">
+      <div class="w-8 h-8 rounded-full bg-gray-400 mb-1"></div>
+      <div class="text-xs text-secondary">Preview</div>
+    </div>
+  </div>
+  <button appButton size="lg" inverted="true" (click)="submitForm()">Save draft</button>
+</div>

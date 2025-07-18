@@ -1,0 +1,99 @@
+<app-header></app-header>
+<div class="flex flex-col px-4 min-h-[calc(100vh-56px-128px)] relative">
+  <!-- Handle first load (welcome), return (welcome back), long time (it's been a while) -->
+  <h1 class="mt-3">Welcome {{ profile?.firstName }}!</h1>
+  <!-- Handle empty state (no events invited yet), invites but no upcoming (get started), and default (events and pending) -->
+  <p class="mt-3">
+    You have
+    <a class="font-semibold">{{ events.upcoming }} upcoming events</a> and
+    <a class="font-semibold">{{ events.pending }} invites pending</a>
+  </p>
+  <div class="mt-9">
+    <div class="flex items-center gap-2 mb-3">
+      <button
+        appButton
+        size="sm"
+        *ngFor="let eventType of badgeEventTypes"
+        [ngClass]="[
+          events.eventType === eventType ? 'border-black' : 'border-white'
+        ]"
+        (click)="selectEvent(eventType)"
+      >
+        {{ eventType | titlecase }} {{ events[eventType] }}
+      </button>
+    </div>
+    <ng-container *ngIf="events.loading">
+      <div
+        class="animate-pulse overflow-hidden flex flex-nowrap -mx-4 px-4 gap-6"
+      >
+        <div class="w-[250px] h-[250px] bg-gray-400 shrink-0"></div>
+        <div class="w-[250px] h-[250px] bg-gray-400 shrink-0"></div>
+        <div class="w-[250px] h-[250px] bg-gray-400 shrink-0"></div>
+        <div class="w-[250px] h-[250px] bg-gray-400 shrink-0"></div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!events.loading">
+      <div class="flex gap-2 overflow-x-auto -mx-4 snap-x snap-mandatory">
+        <div class="snap-start pl-4 mb-6" *ngFor="let event of events.data?.content">
+          <div class="w-[250px] h-[250px] relative mb-4">
+            <div
+              class="absolute top-0 left-0 w-full h-full bg-gray-400 animate-pulse z-0"
+            ></div>
+            <img
+              [src]="event.party.imageUrl"
+              class="w-full h-full object-cover absolute top-0 left-0 z-10 cursor-pointer"
+              [routerLink]="['/event', 'detail', event.party.id]"
+            />
+            <div
+              class="bg-white px-2 py-1 text-xs rounded-full absolute top-2 left-2 z-10"
+            >
+              {{ event.party.startDateTime | date : "E M/d - h:mm a" }}
+            </div>
+            <button
+              class="rounded-full border border-white text-white h-6 w-6 bg-black/25 hover:bg-black/10 active:bg-black/25 backdrop-blur-xs hover:cursor-pointer absolute top-2 right-2 z-10"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1"
+                stroke="currentColor"
+                class="size-6 -m-px"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                />
+              </svg>
+            </button>
+            <div class="absolute bottom-2 right-2 z-10">
+              <div class="bg-white px-2 py-1 text-sm rounded-full">
+                {{ event.invite.status | inviteStatusEmoji }}
+                {{ event.invite.status | uppercase }}
+              </div>
+            </div>
+          </div>
+          <h2 class="mb-1 font-semibold">{{ event.party.title | titlecase }}</h2>
+          <div class="text-sm">
+            <p>Hosted by {{ event.party.createdBy.name }}</p>
+          </div>
+        </div>
+        <div class="snap-start pl-4 min-w-dvw mb-6">
+          <a
+            class="w-[250px] h-[250px] border-dashed border-2 flex justify-center items-center font-medium text-sm"
+            [routerLink]="['/event', 'create']"
+          >
+            <p>+ CREATE EVENT</p>
+          </a>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="absolute bottom-4 right-4">
+    <button [routerLink]="['/event', 'create']" appButton>
+      + Create Event
+    </button>
+  </div>
+</div>
+<app-footer></app-footer>

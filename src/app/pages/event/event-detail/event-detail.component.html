@@ -1,0 +1,94 @@
+<app-header></app-header>
+<div
+  class="flex flex-col px-4 min-h-[calc(100vh-56px-128px)] relative"
+  *ngIf="event"
+>
+  <h1 class="mb-6 text-3xl font-medium text-center">{{ event.party.title }}</h1>
+  <img [src]="event.party.imageUrl" class="w-full h-64 object-cover mb-6" />
+  <div class="flex flex-col gap-6">
+    <div>
+      <h2 class="text-2xl">
+        {{ event.party.startDateTime | date : "EEEE, MMM dd" }}
+      </h2>
+      <p class="text-gray-500">
+        {{ event.party.startDateTime | date : "h:mm"
+        }}{{ event.party.startDateTime | date : "a" | lowercase }}
+      </p>
+    </div>
+    <div class="flex flex-col gap-4">
+      <div class="flex gap-1 items-center">
+        <span class="w-6">👑</span>
+        <p>Hosted by {{ event.party.createdBy.name }}</p>
+      </div>
+      <div class="flex gap-1 items-center">
+        <span class="w-6">📌</span>
+        <p>
+          {{ event.party.location ? event.party.location : "No location set" }}
+        </p>
+      </div>
+    </div>
+    <div class="whitespace-pre-line wrap-break-word mb-8">
+      {{ event.party.description }}
+    </div>
+  </div>
+  <div
+    class="flex justify-around items-center sticky bottom-4 mb-4 left-0 w-full"
+  >
+    <ng-container *ngIf="event.invite.status !== 'PENDING'">
+      <button
+        class="bg-white/50 backdrop-blur-md shadow-md"
+        appButton
+        round="true"
+        size="lg"
+        readonly
+      >
+        <div
+          class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full text-sm"
+        >
+          <div class="text-2xl">
+            {{ event.invite.status | inviteStatusEmoji }}
+          </div>
+          <div>{{ event.invite.status | titlecase }}</div>
+        </div>
+      </button>
+    </ng-container>
+    <ng-container *ngIf="event.invite.status === 'PENDING'">
+      <button
+        class="bg-white/50 backdrop-blur-md shadow-md"
+        appButton
+        round="true"
+        size="lg"
+        *ngFor="let status of rsvpStatusOptions | keyvalue"
+        (click)="rsvp(status.value)"
+      >
+        <div
+          class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full text-sm"
+        >
+          {{ status.key | titlecase }}
+        </div>
+      </button>
+    </ng-container>
+  </div>
+</div>
+<div class="sticky pb-16">
+  <app-footer></app-footer>
+</div>
+<div
+  class="fixed bottom-0 left-0 w-full bg-white/50 h-16 backdrop-blur-md flex"
+>
+  <button class="min-w-16 h-full py-2 flex flex-col justify-end hover:bg-black/5 cursor-pointer">
+    <span class="text-xs">Edit</span>
+  </button>
+  <button class="min-w-16 h-full py-2 flex flex-col justify-end hover:bg-black/5 cursor-pointer">
+    <span class="text-xs">Notify</span>
+  </button>
+  <button class="flex-grow h-full py-2 flex flex-col justify-end hover:bg-black/5 cursor-pointer">
+    <span class="text-xs">1 Going</span>
+  </button>
+  <button class="min-w-16 h-full py-2 flex flex-col justify-end hover:bg-black/5 cursor-pointer">
+    <span class="text-xs">Invite</span>
+  </button>
+  <button class="min-w-16 h-full py-2 flex flex-col justify-end hover:bg-black/5 cursor-pointer">
+    <span class="text-xs">More</span>
+  </button>
+</div>
