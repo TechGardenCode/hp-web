@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import Keycloak from 'keycloak-js';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,16 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'houseparty';
+  appLoading = true;
+
+  constructor(private readonly keycloak: Keycloak) {}
+
+  async ngOnInit() {
+    if (! this.keycloak.authenticated) {
+      await this.keycloak.login();
+    }
+    this.appLoading = false;
+  }
 }

@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
         clientId: environment.keycloak.clientId,
       },
       initOptions: {
-        onLoad: 'login-required',
+        onLoad: 'check-sso',
         silentCheckSsoRedirectUri:
           window.location.origin + '/silent-check-sso.html',
         checkLoginIframe: true,
@@ -49,7 +49,7 @@ export const appConfig: ApplicationConfig = {
       provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
       useValue: [
         {
-          urlPattern: /^http:\/\/localhost:8000\/.*$/,
+          urlPattern: /^https:\/\/party.api.houseparty.techgarden.gg\/.*$/,
         },
       ],
     },

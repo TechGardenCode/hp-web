@@ -2,11 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { HeaderComponent } from '../../../components/header/header.component';
 import { InviteStatus, UserParty } from '../../../model/event.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EventService } from '../../../services/event.service';
 import { CommonModule } from '@angular/common';
 import { ButtonDirective } from '../../../components/button/button.directive';
 import { InviteStatusEmojiPipe } from '../../../pipes/invite-status-emoji.pipe';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  heroPencilMicro,
+  heroMegaphoneMicro,
+  heroUserPlusMicro,
+  heroEllipsisHorizontalMicro,
+} from '@ng-icons/heroicons/micro';
 
 @Component({
   selector: 'app-event-detail',
@@ -16,9 +23,19 @@ import { InviteStatusEmojiPipe } from '../../../pipes/invite-status-emoji.pipe';
     CommonModule,
     ButtonDirective,
     InviteStatusEmojiPipe,
+    NgIcon,
+    RouterModule
   ],
   templateUrl: './event-detail.component.html',
   styleUrl: './event-detail.component.css',
+  viewProviders: [
+    provideIcons({
+      heroPencilMicro,
+      heroMegaphoneMicro,
+      heroUserPlusMicro,
+      heroEllipsisHorizontalMicro,
+    }),
+  ],
 })
 export class EventDetailComponent implements OnInit {
   event!: UserParty;

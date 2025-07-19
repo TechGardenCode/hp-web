@@ -3,6 +3,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { EventCreateComponent } from './pages/event/event-create/event-create.component';
 import { EventDetailComponent } from './pages/event/event-detail/event-detail.component';
+import { EventDetailInviteComponent } from './pages/event/event-detail-invite/event-detail-invite.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,10 @@ export const routes: Routes = [
       {
         path: 'detail/:id',
         component: EventDetailComponent,
+      },
+      {
+        path: 'detail/:id/invite',
+        component: EventDetailInviteComponent,
       },
       {
         path: '**',
