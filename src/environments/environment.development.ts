@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  // gatewayApiUrl: 'http://localhost:8000',
-  gatewayApiUrl: 'https://party.api.houseparty.techgarden.gg',
+  gatewayApiUrl: 'http://localhost:8000',
+  // gatewayApiUrl: 'https://party.api.houseparty.techgarden.gg',
   local: true,
   keycloak: {
     // authority: 'http://10.0.60.60:9000',

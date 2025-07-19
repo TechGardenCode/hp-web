@@ -15,8 +15,13 @@ import {
 } from 'keycloak-angular';
 import { environment } from '../environments/environment';
 
-const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
+const localUrl = createInterceptorCondition<IncludeBearerTokenCondition>({
   urlPattern: /^(http:\/\/localhost:8000)(\/.*)?$/i,
+  bearerPrefix: 'Bearer',
+});
+
+const prodUrl = createInterceptorCondition<IncludeBearerTokenCondition>({
+  urlPattern: /^(https:\/\/party.api.houseparty.techgarden.gg)(\/.*)?$/i,
   bearerPrefix: 'Bearer',
 });
 
@@ -47,11 +52,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([includeBearerTokenInterceptor])),
     {
       provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-      useValue: [
-        {
-          urlPattern: /^https:\/\/party.api.houseparty.techgarden.gg\/.*$/,
-        },
-      ],
+      useValue: [localUrl, prodUrl],
     },
   ],
 };

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import Keycloak from 'keycloak-js';
+import { UserService } from './services/user.service';
 
 @Component({
   selector: 'app-root',
@@ -12,12 +13,13 @@ export class AppComponent implements OnInit {
   title = 'houseparty';
   appLoading = true;
 
-  constructor(private readonly keycloak: Keycloak) {}
+  constructor(private readonly keycloak: Keycloak, private readonly userService: UserService) {}
 
   async ngOnInit() {
-    if (! this.keycloak.authenticated) {
+    if (!this.keycloak.authenticated) {
       await this.keycloak.login();
     }
     this.appLoading = false;
+    this.userService.getUserProfile().subscribe();
   }
 }
