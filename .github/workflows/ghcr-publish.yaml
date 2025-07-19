@@ -73,7 +73,7 @@ jobs:
       - name: Update kustomization.yaml with new image tag
         run: |
           cd $GITOPS_PATH
-          yq e -i '.image[] |= select(.repository == "ghcr.io/techgardencode/houseparty-ui") .tag = "${{ github.sha }}"' values.yaml
+          yq e -i '(.image.repository == "ghcr.io/techgardencode/houseparty-ui") | .image.tag = "${{ github.sha }}"' values.yaml
 
       - name: Commit and push to GitOps repo
         run: |
