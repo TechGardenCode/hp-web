@@ -67,7 +67,7 @@ jobs:
       - name: Clone GitOps repo
         run: |
           git clone https://x-access-token:${{ secrets.GITOPS_PUSH_TOKEN }}@github.com/techgardencode/homelab.git
-          cd kubernetes/houseparty/houseparty-ui/base
+          cd homelab/kubernetes/houseparty/houseparty-ui/base
           echo "GITOPS_PATH=$PWD" >> $GITHUB_ENV
 
       - name: Update kustomization.yaml with new image tag
