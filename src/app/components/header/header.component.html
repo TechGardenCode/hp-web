@@ -1,13 +1,29 @@
 <div class="flex justify-between items-center p-4">
   <a [routerLink]="['/']" class="flex items-center gap-1" title="Home">
-    <ng-icon name="heroHomeModernMicro" class="text-xl" />
-    <span>HouseParty</span>
+    <img src="/apple-touch-icon.png" alt="House Party Logo" class="h-8" />
+    <!-- <div
+      class="text-xl font-bold bg-linear-to-r/longer from-indigo-500 to-teal-400 bg-clip-text text-transparent relative align-text-top"
+    > -->
+      <div class="text-xl font-bold">House Party</div>
+      <!-- <div class="absolute -left-px -top-px text-black z-10 ">House Party</div>
+      <div
+        class="absolute inset-x-0 bottom-0 bg-linear-to-r/longer from-indigo-500 to-teal-400 h-0.5 w-full"
+      ></div>
+    </div> -->
   </a>
   <div class="flex items-center gap-4">
-    <a routerLink="/notifications" class="flex items-center text-xl" title="Notifications">
+    <a
+      routerLink="/notifications"
+      class="flex items-center text-xl"
+      title="Notifications"
+    >
       <ng-icon [name]="hasAlerts ? 'heroBellAlertMicro' : 'heroBellMicro'" />
     </a>
-    <a routerLink="/messages" class="flex items-center text-xl" title="Messages">
+    <a
+      routerLink="/messages"
+      class="flex items-center text-xl"
+      title="Messages"
+    >
       <ng-icon
         [name]="
           hasMessages
