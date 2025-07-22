@@ -5,7 +5,13 @@ import { EventCreateDateTimePickerComponent } from './event-create-date-time-pic
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { PartyService } from '../../../services/party.service';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-event-create',
@@ -24,16 +30,18 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class EventCreateComponent {
   dateTimePickerVisible = false;
-  selectedDate?: Date;
+  selectedDate?: Date = this.getStartDateTime();
   today = new Date();
   imageUrl?: string;
   partyForm = new FormGroup({
-    title: new FormControl(''),
+    title: new FormControl('Test', [Validators.required]),
     description: new FormControl(''),
-    startDateTime: new FormControl<Date | null>(null),
+    startDateTime: new FormControl<Date | null>(this.selectedDate as Date, [
+      Validators.required,
+    ]),
     hostNickname: new FormControl(''),
     location: new FormControl(''),
-    imageUrl: new FormControl(''),
+    imageUrl: new FormControl('', [Validators.required]),
     spots: new FormControl(0),
   });
 
@@ -44,9 +52,17 @@ export class EventCreateComponent {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly partyService: PartyService
+    private readonly partyService: PartyService,
+    private router: Router
   ) {
     this.getSampleImage();
+  }
+
+  getStartDateTime() {
+    const now = new Date();
+    now.setHours(now.getHours() + 1);
+    now.setMinutes(0, 0, 0);
+    return now;
   }
 
   onDateTimeSelected(date: Date): void {
@@ -74,7 +90,10 @@ export class EventCreateComponent {
   }
 
   submitForm() {
-    if (this.partyForm.invalid) {
+    if (
+      this.partyForm.invalid ||
+      Object.values(this.partyForm.controls).some((control) => control.invalid)
+    ) {
       console.error('Form is invalid');
       return;
     }
@@ -86,9 +105,9 @@ export class EventCreateComponent {
   createParty(partyData: any) {
     return this.partyService.createParty(partyData).subscribe({
       next: (response) => {
-        console.log('Party created successfully:', response);
         this.partyForm.reset();
         this.selectedDate = undefined;
+        this.router.navigate(['/']);
       },
       error: (error) => {
         console.error('Error creating party:', error);

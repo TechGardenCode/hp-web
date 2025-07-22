@@ -161,12 +161,26 @@ Vivamus convallis vel elit eget faucibus. Curabitur ipsum sem, pulvinar eu ultri
         return this.http.get<Page<UserParty>>(
           `${environment.gatewayApiUrl}/events/upcoming`
         );
+      case 'pending':
+        return this.http.get<Page<UserParty>>(
+          `${environment.gatewayApiUrl}/events/pending`
+        );
+      case 'past':
+        return this.http.get<Page<UserParty>>(
+          `${environment.gatewayApiUrl}/events/past`
+        );
       default:
         return of().pipe(delay(250 + Math.random() * 750));
     }
   }
 
+  getEventStats() {
+    return this.http.get(`${environment.gatewayApiUrl}/events/stats`);
+  }
+
   getEventById(id: string): Observable<UserParty> {
-    return this.http.get<UserParty>(`${environment.gatewayApiUrl}/events/detail/${id}`);
+    return this.http.get<UserParty>(
+      `${environment.gatewayApiUrl}/events/detail/${id}`
+    );
   }
 }

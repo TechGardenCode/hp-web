@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { CommonModule } from '@angular/common';
@@ -24,14 +24,20 @@ import { InviteStatusEmojiPipe } from '../../pipes/invite-status-emoji.pipe';
     CommonModule,
     RouterModule,
     ButtonDirective,
-    InviteStatusEmojiPipe
+    InviteStatusEmojiPipe,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   badgeEventTypes: HousePartyEventType[] = ['upcoming', 'pending', 'past'];
   profile?: KeycloakProfile;
+  isEventListOverflow = false;
+
+  loading = {
+    stats: true,
+    events: true,
+  };
 
   events: {
     loading: boolean;
@@ -41,10 +47,10 @@ export class HomeComponent implements OnInit {
     eventType: HousePartyEventType;
     data?: Page<UserParty>;
   } = {
-    loading: false,
-    upcoming: 4,
-    pending: 2,
-    past: 5,
+    loading: true,
+    upcoming: 0,
+    pending: 0,
+    past: 0,
     eventType: 'upcoming',
     data: undefined,
   };
@@ -55,6 +61,12 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loading.events = true;
+    this.eventService.getEventStats().subscribe((stats: any) => {
+      this.events.upcoming = stats.upcoming;
+      this.events.pending = stats.pending;
+      this.loading.stats = false;
+    });
     this.selectEvent('upcoming');
     this.profileService.initProfile();
     this.profileService.keycloakSubject.subscribe((profile) => {
@@ -64,12 +76,17 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  ngAfterViewInit(): void {
+    this.onResize();
+  }
+
   getEventByBadgeStatus(badgeStatus: HousePartyEventType) {
-    this.events.loading = true;
+    this.loading.events = true;
     this.eventService.getEventByBadgeStatus(badgeStatus).subscribe({
       next: (events: Page<UserParty>) => {
         this.events.data = events;
-        this.events.loading = false;
+        this.onResize();
+        this.loading.events = false;
       },
     });
   }
@@ -91,6 +108,24 @@ export class HomeComponent implements OnInit {
         return '💌';
       default:
         return '';
+    }
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    const cardWidth = 250;
+    const cardMargin = 16;
+    const cardGap = 8;
+    const contentWidth =
+      cardWidth +
+      cardMargin +
+      cardMargin +
+      (this.events.data?.content.length || 0) * (cardWidth + cardMargin) +
+      (this.events.data?.content.length || 0) * cardGap;
+    if (window.innerWidth >= contentWidth) {
+      this.isEventListOverflow = true;
+    } else {
+      this.isEventListOverflow = false;
     }
   }
 }
