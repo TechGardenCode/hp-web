@@ -1,6 +1,6 @@
 <app-header></app-header>
 <div
-  class="flex flex-col px-4 min-h-[calc(100vh-56px-128px)] relative"
+  class="flex flex-col px-4 min-h-[calc(100vh-68px+64px-128px)] relative"
   *ngIf="event"
 >
   <h1 class="mb-6 text-3xl font-medium text-center">{{ event.party.title }}</h1>
@@ -75,37 +75,35 @@
 </div>
 @if (event && event.invite.userId === event.invite.invitedById) {
 <div
-  class="fixed bottom-0 left-0 w-full bg-white/50 h-16 backdrop-blur-md flex"
+  class="fixed bottom-0 left-0 w-full bg-white/50 h-16 backdrop-blur-md flex sm:flex-auto"
 >
   <button
-    class="min-w-16 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
+    class="min-w-16 sm:basis-1/6 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
   >
     <ng-icon class="text-xl" name="heroPencilMicro" />
     <span class="text-xs">Edit</span>
   </button>
   <button
-    class="min-w-16 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
+    class="min-w-16 sm:basis-1/6 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
   >
     <ng-icon class="text-xl" name="heroMegaphoneMicro" />
     <span class="text-xs">Notify</span>
   </button>
   <button
-    class="flex-grow h-full p-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
+    class="grow h-full p-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
   >
-    <div class="bg-white rounded-full w-full h-full">
-      <div class="text-lg">1</div>
-      <div class="text-xs">Going</div>
-    </div>
+    <div class="text-lg">1</div>
+    <div class="text-xs">Going</div>
   </button>
   <button
-    class="min-w-16 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
+    class="min-w-16 sm:basis-1/6 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
     [routerLink]="['/event/detail', event.party.id, 'invite']"
   >
     <ng-icon class="text-xl" name="heroUserPlusMicro" />
     <span class="text-xs">Invite</span>
   </button>
   <button
-    class="min-w-16 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
+    class="min-w-16 sm:basis-1/6 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
   >
     <ng-icon class="text-xl" name="heroEllipsisHorizontalMicro" />
     <span class="text-xs">More</span>

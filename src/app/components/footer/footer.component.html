@@ -1,18 +1,19 @@
-<hr *ngIf="divider" class="border-t border-black/25 mx-4 mt-4 h-4" />
-<div class="flex flex-col justify-center items-center p-4 h-24">
-  <a class="mb-4 flex items-center gap-1" routerLink="/">
-    <img src="/apple-touch-icon.png" alt="House Party Logo" class="h-6" />
-    <div class="text-xl font-bold">House Party</div>
-  </a>
-  <div class="flex items-center gap-4">
-    <a routerLink="/notifications">Notifications</a>
-    <span class="font-light text-xs">|</span>
-    <a routerLink="/messages">Messages</a>
-    <span class="font-light text-xs">|</span>
-    <a routerLink="/event/create">Create event</a>
+<div class="container mx-auto">
+  <hr *ngIf="divider" class="border-t border-black/25 mx-4 mt-4 h-4" />
+  <div class="flex flex-col justify-center items-center p-4 h-24">
+    <a class="mb-4 flex items-center gap-1" routerLink="/">
+      <img src="/apple-touch-icon.png" alt="House Party Logo" class="h-6" />
+      <div class="text-xl font-bold">House Party</div>
+    </a>
+    <div class="flex items-center gap-4">
+      <a routerLink="/notifications">Notifications</a>
+      <span class="font-light text-xs">|</span>
+      <a routerLink="/messages">Messages</a>
+      <span class="font-light text-xs">|</span>
+      <a routerLink="/event/create">Create event</a>
+    </div>
   </div>
 </div>
-
 <!--
   <hr class="my-4 border-t border-black/25 w-full" />
 -->
