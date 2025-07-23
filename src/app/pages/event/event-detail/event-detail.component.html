@@ -1,10 +1,10 @@
 <app-header></app-header>
 <div
-  class="flex flex-col px-4 min-h-[calc(100vh-68px+64px-128px)] relative"
+  class="container mx-auto flex flex-col px-4 min-h-[calc(100vh-68px+64px-128px)] relative"
   *ngIf="event"
 >
   <h1 class="mb-6 text-3xl font-medium text-center">{{ event.party.title }}</h1>
-  <img [src]="event.party.imageUrl" class="w-full h-64 object-cover mb-6" />
+  <img [src]="event.party.imageUrl" class="object-center object-cover mb-6 mx-auto" />
   <div class="flex flex-col gap-6">
     <div>
       <h2 class="text-2xl">
@@ -75,7 +75,7 @@
 </div>
 @if (event && event.invite.userId === event.invite.invitedById) {
 <div
-  class="fixed bottom-0 left-0 w-full bg-white/50 h-16 backdrop-blur-md flex sm:flex-auto"
+  class="container fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-white/50 h-16 backdrop-blur-md flex items-center"
 >
   <button
     class="min-w-16 sm:basis-1/6 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
