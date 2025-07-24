@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EventCreateDateTimePickerComponent } from './event-create-date-time-picker.component';
+import { EventCreateDateTimePickerComponent } from './event-date-time-picker.component';
 
 describe('EventCreateDateTimePickerComponent', () => {
   let component: EventCreateDateTimePickerComponent;

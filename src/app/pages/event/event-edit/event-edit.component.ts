@@ -1,44 +1,43 @@
-import { Component, HostBinding } from '@angular/core';
-import { HeaderComponent } from '../../../components/header/header.component';
-import { ButtonDirective } from '../../../components/button/button.directive';
-import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { PartyService } from '../../../services/party.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { EventDateTimePickerComponent } from '../../../components/event-date-time-picker/event-date-time-picker.component';
+import { HousePartyEvent } from '../../../model/event.model';
+import { HeaderComponent } from '../../../components/header/header.component';
 
 @Component({
-  selector: 'app-event-create',
+  selector: 'app-event-edit',
   imports: [
     HeaderComponent,
-    ButtonDirective,
+    ReactiveFormsModule,
     CommonModule,
     EventDateTimePickerComponent,
-    ReactiveFormsModule,
   ],
-  templateUrl: './event-create.component.html',
-  styleUrl: './event-create.component.css',
-  host: {
-    class: 'h-full',
-  },
+  templateUrl: './event-edit.component.html',
+  styleUrl: './event-edit.component.css',
 })
-export class EventCreateComponent {
+export class EventEditComponent implements OnInit {
   dateTimePickerVisible = false;
   selectedDate?: Date = this.getStartDateTime();
   today = new Date();
   imageUrl?: string;
   partyForm = new FormGroup({
+    id: new FormControl('', [Validators.required]),
     title: new FormControl('Test', [Validators.required]),
     description: new FormControl(''),
     startDateTime: new FormControl<Date | null>(this.selectedDate as Date, [
       Validators.required,
     ]),
+    createdBy: new FormControl(),
+    hosts: new FormControl<any[]>([]),
     hostNickname: new FormControl(''),
     location: new FormControl(''),
     imageUrl: new FormControl('', [Validators.required]),
@@ -51,11 +50,37 @@ export class EventCreateComponent {
   }
 
   constructor(
-    private readonly http: HttpClient,
     private readonly partyService: PartyService,
+    private readonly activatedRoute: ActivatedRoute,
     private router: Router
-  ) {
-    this.getSampleImage();
+  ) {}
+
+  ngOnInit(): void {
+    const partyId = this.activatedRoute.snapshot.paramMap.get('id');
+    if (!partyId) {
+      this.router.navigate(['..']);
+      return;
+    }
+    this.partyService.getParty(partyId).subscribe({
+      next: (party: HousePartyEvent) => {
+        console.log(party.startDateTime);
+        this.selectedDate = new Date(party.startDateTime);
+        this.imageUrl = party.imageUrl;
+
+        this.partyForm.patchValue({
+          id: party.id,
+          title: party.title,
+          description: party.description,
+          startDateTime: party.startDateTime,
+          createdBy: party.createdBy,
+          hosts: party.hosts,
+          hostNickname: party.hostNickname,
+          location: party.location,
+          imageUrl: party.imageUrl,
+          spots: party.spots,
+        });
+      },
+    });
   }
 
   getStartDateTime() {
@@ -69,19 +94,6 @@ export class EventCreateComponent {
     this.selectedDate = date;
     this.partyForm.patchValue({ startDateTime: date });
     this.dateTimePickerVisible = false;
-  }
-
-  getSampleImage() {
-    this.http.get('https://picsum.photos/360').subscribe({
-      next: (response: any) => {
-        this.setImageUrl(response.url);
-      },
-      error: (error) => {
-        if (error.status === 200) {
-          this.setImageUrl(error.url);
-        }
-      },
-    });
   }
 
   setImageUrl(url: string) {
@@ -99,15 +111,16 @@ export class EventCreateComponent {
     }
 
     const partyData = this.partyForm.value;
-    this.createParty(partyData);
+    console.log(partyData.startDateTime);
+    this.updateParty(partyData);
   }
 
-  createParty(partyData: any) {
-    return this.partyService.createParty(partyData).subscribe({
-      next: (response) => {
+  updateParty(partyData: any) {
+    return this.partyService.updateParty(partyData.id, partyData).subscribe({
+      next: () => {
         this.partyForm.reset();
         this.selectedDate = undefined;
-        this.router.navigate(['/']);
+        this.router.navigate(['/event/detail', partyData.id]);
       },
       error: (error) => {
         console.error('Error creating party:', error);

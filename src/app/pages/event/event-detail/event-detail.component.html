@@ -4,7 +4,10 @@
   *ngIf="event"
 >
   <h1 class="mb-6 text-3xl font-medium text-center">{{ event.party.title }}</h1>
-  <img [src]="event.party.imageUrl" class="object-center object-cover mb-6 mx-auto" />
+  <img
+    [src]="event.party.imageUrl"
+    class="object-center object-cover mb-6 mx-auto"
+  />
   <div class="flex flex-col gap-6">
     <div>
       <h2 class="text-2xl">
@@ -69,6 +72,70 @@
       </button>
     </ng-container>
   </div>
+  <div class="flex flex-col gap-2 mb-12">
+    @if (activity) {
+    <h1 class="text-2xl font-medium">Activity</h1>
+    <input
+      class="w-full px-3 py-2 border"
+      type="text"
+      placeholder="Add a comment..."
+      (keydown.enter)="addComment($event)"
+    />
+    @for(message of activity.content; track message.id) { @if(message.type ===
+    'COMMENT') {
+    <div class="flex items-start gap-2 mt-4">
+      <div class="flex flex-col">
+        <p class="font-medium">
+          {{ message.user.firstName + " " + message.user.lastName }}
+          <span class="text-xs text-gray-500">
+            {{ message.createdAt | date : "short" }}
+          </span>
+        </p>
+        <p class="text-sm">{{ message.content }}</p>
+        <div
+          class="flex gap-2 mt-1"
+          [ngClass]="{ 'mb-4': getMessageReplies(message).length }"
+        >
+          <button
+            class="text-sm text-blue-500 hover:underline"
+            (click)="addReaction(message, 'like')"
+          >
+            {{ getReactionCount(message, "like") }} Like(s)
+          </button>
+          <button
+            class="text-sm text-blue-500 hover:underline"
+            (click)="addReply(message, 'Test reply')"
+          >
+            Reply
+          </button>
+        </div>
+        <div class="mx-4 flex flex-col gap-2">
+          @for(reply of getMessageReplies(message); track reply.id) {
+          <div class="flex items-start gap-2">
+            <div class="flex flex-col">
+              <p class="font-medium">
+                {{ reply.user.firstName + " " + reply.user.lastName }}
+                <span class="text-xs text-gray-500">
+                  {{ reply.createdAt | date : "short" }}
+                </span>
+              </p>
+              <p class="text-sm">{{ reply.content }}</p>
+              <div class="flex gap-2 mt-1">
+                <button
+                  class="text-sm text-blue-500 hover:underline"
+                  (click)="addReaction(reply, 'like')"
+                >
+                  {{ getReactionCount(reply, "like") }} Like(s)
+                </button>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+    </div>
+    } } }
+  </div>
 </div>
 <div class="sticky pb-16">
   <app-footer></app-footer>
@@ -79,6 +146,7 @@
 >
   <button
     class="min-w-16 sm:basis-1/6 h-full py-2 flex flex-col justify-end items-center hover:bg-black/5 cursor-pointer gap-1"
+    [routerLink]="['/event/edit', event.party.id]"
   >
     <ng-icon class="text-xl" name="heroPencilMicro" />
     <span class="text-xs">Edit</span>

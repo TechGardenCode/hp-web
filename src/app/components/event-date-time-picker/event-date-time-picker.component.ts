@@ -5,17 +5,17 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { CalendarMonthViewComponent } from '../../../../components/calendar/calendar-month-view/calendar-month-view.component';
-import { ButtonDirective } from '../../../../components/button/button.directive';
 import { CommonModule } from '@angular/common';
+import { CalendarMonthViewComponent } from '../calendar/calendar-month-view/calendar-month-view.component';
+import { ButtonDirective } from '../button/button.directive';
 
 @Component({
-  selector: 'app-event-create-date-time-picker',
+  selector: 'app-event-date-time-picker',
   imports: [CalendarMonthViewComponent, ButtonDirective, CommonModule],
-  templateUrl: './event-create-date-time-picker.component.html',
-  styleUrl: './event-create-date-time-picker.component.css',
+  templateUrl: './event-date-time-picker.component.html',
+  styleUrl: './event-date-time-picker.component.css',
 })
-export class EventCreateDateTimePickerComponent implements AfterViewInit {
+export class EventDateTimePickerComponent implements AfterViewInit {
   today = new Date();
   visibleMonths: { month: number; year: number }[] = [];
   visibleTimes: { hour: number; minute: number }[] = [];

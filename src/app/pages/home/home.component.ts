@@ -63,8 +63,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.loading.events = true;
     this.eventService.getEventStats().subscribe((stats: any) => {
-      this.events.upcoming = stats.upcoming;
-      this.events.pending = stats.pending;
+      this.events = { ...this.events, ...stats };
       this.loading.stats = false;
     });
     this.selectEvent('upcoming');

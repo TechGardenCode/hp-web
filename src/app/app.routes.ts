@@ -5,6 +5,7 @@ import { EventCreateComponent } from './pages/event/event-create/event-create.co
 import { EventDetailComponent } from './pages/event/event-detail/event-detail.component';
 import { EventDetailInviteComponent } from './pages/event/event-detail-invite/event-detail-invite.component';
 import { NotificationComponent } from './pages/notification/notification.component';
+import { EventEditComponent } from './pages/event/event-edit/event-edit.component';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,10 @@ export const routes: Routes = [
       {
         path: 'detail/:id',
         component: EventDetailComponent,
+      },
+      {
+        path: 'edit/:id',
+        component: EventEditComponent,
       },
       {
         path: 'detail/:id/invite',
