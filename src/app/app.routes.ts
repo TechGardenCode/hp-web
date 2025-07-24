@@ -4,6 +4,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { EventCreateComponent } from './pages/event/event-create/event-create.component';
 import { EventDetailComponent } from './pages/event/event-detail/event-detail.component';
 import { EventDetailInviteComponent } from './pages/event/event-detail-invite/event-detail-invite.component';
+import { NotificationComponent } from './pages/notification/notification.component';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,10 @@ export const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
+  },
+  {
+    path: 'notifications',
+    component: NotificationComponent,
   },
   {
     path: 'event',
