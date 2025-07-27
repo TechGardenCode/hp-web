@@ -1,3 +1,5 @@
+import { UserInfo } from "./user-info.model";
+
 export interface UserParty {
   party: HousePartyEvent;
   invite: Invite;
@@ -22,8 +24,8 @@ export interface HousePartyEvent {
 export interface Invite  {
   id: string;
   partyId: string;
-  userId: string;
-  invitedById: string;
+  user: UserInfo;
+  invitedBy: UserInfo;
   status: InviteStatus;
 }
 

@@ -111,7 +111,6 @@ export class EventEditComponent implements OnInit {
     }
 
     const partyData = this.partyForm.value;
-    console.log(partyData.startDateTime);
     this.updateParty(partyData);
   }
 

@@ -34,43 +34,69 @@
       {{ event.party.description }}
     </div>
   </div>
-  <div
-    class="flex justify-around items-center sticky bottom-4 mb-4 left-0 w-full"
-  >
-    <ng-container *ngIf="event.invite.status !== 'PENDING'">
-      <button
-        class="bg-white/50 backdrop-blur-md shadow-md"
-        appButton
-        round="true"
-        size="lg"
-        readonly
-      >
-        <div
-          class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full text-sm"
+  <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
+      <div class="flex justify-between items-center">
+        <div>
+          <h1 class="text-xl">Guest List</h1>
+          <p class="text-sm">
+            {{ getGuestsByStatus("ACCEPTED").length }} Going
+          </p>
+        </div>
+        <button
+          appButton>
+          View All
+        </button>
+      </div>
+      <div class="flex gap-2 mt-1">
+        @for (guest of getGuestsByStatus('ACCEPTED'); track guest) {
+        <img
+          class="h-8 rounded-full object-cover"
+          src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=1480&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          [title]="guest.user.name"
+        />
+        }
+      </div>
+    </div>
+    <div
+      class="flex justify-center gap-6 items-center sticky bottom-4 mb-4 left-0 w-full"
+    >
+      <ng-container *ngIf="event.invite.status !== 'PENDING'">
+        <button
+          class="bg-white/50 backdrop-blur-md shadow-md"
+          appButton
+          round="true"
+          size="lg"
+          [disabled]="event.invite.invitedBy.id === event.invite.user.id"
+          (click)="rsvp('PENDING')"
         >
-          <div class="text-2xl">
-            {{ event.invite.status | inviteStatusEmoji }}
+          <div
+            class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full text-sm"
+          >
+            <div class="text-2xl">
+              {{ event.invite.status | inviteStatusEmoji }}
+            </div>
+            <div>{{ event.invite.status | titlecase }}</div>
           </div>
-          <div>{{ event.invite.status | titlecase }}</div>
-        </div>
-      </button>
-    </ng-container>
-    <ng-container *ngIf="event.invite.status === 'PENDING'">
-      <button
-        class="bg-white/50 backdrop-blur-md shadow-md"
-        appButton
-        round="true"
-        size="lg"
-        *ngFor="let status of rsvpStatusOptions | keyvalue"
-        (click)="rsvp(status.value)"
-      >
-        <div
-          class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full text-sm"
+        </button>
+      </ng-container>
+      <ng-container *ngIf="event.invite.status === 'PENDING'">
+        <button
+          class="bg-white/50 backdrop-blur-md shadow-md"
+          appButton
+          round="true"
+          size="lg"
+          *ngFor="let status of rsvpStatusOptions | keyvalue"
+          (click)="rsvp(status.value)"
         >
-          {{ status.key | titlecase }}
-        </div>
-      </button>
-    </ng-container>
+          <div
+            class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full text-sm"
+          >
+            {{ status.key | titlecase }}
+          </div>
+        </button>
+      </ng-container>
+    </div>
   </div>
   <div class="flex flex-col gap-2 mb-12">
     @if (activity) {
@@ -140,7 +166,7 @@
 <div class="sticky pb-16">
   <app-footer></app-footer>
 </div>
-@if (event && event.invite.userId === event.invite.invitedById) {
+@if (event && event.invite.user.id === event.invite.invitedBy.id) {
 <div
   class="container fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-white/50 h-16 backdrop-blur-md flex items-center"
 >

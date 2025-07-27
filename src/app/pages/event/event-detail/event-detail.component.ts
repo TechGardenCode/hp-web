@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FooterComponent } from '../../../components/footer/footer.component';
 import { HeaderComponent } from '../../../components/header/header.component';
-import { InviteStatus, UserParty } from '../../../model/event.model';
+import { Invite, InviteStatus, UserParty } from '../../../model/event.model';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { EventService } from '../../../services/event.service';
 import { CommonModule } from '@angular/common';
@@ -17,6 +17,7 @@ import {
 import { ActivityService } from '../../../services/activity.service';
 import { Page } from '../../../model/page.model';
 import { Activity } from '../../../model/activity.type';
+import { InviteService } from '../../../services/invite.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -43,6 +44,7 @@ import { Activity } from '../../../model/activity.type';
 export class EventDetailComponent implements OnInit {
   event!: UserParty;
   activity!: Page<Activity>;
+  guests: Invite[] = [];
   rsvpStatusOptions: Record<string, InviteStatus> = {
     Accept: 'ACCEPTED',
     Decline: 'DECLINED',
@@ -53,7 +55,8 @@ export class EventDetailComponent implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly eventService: EventService,
-    private readonly activityService: ActivityService
+    private readonly activityService: ActivityService,
+    private readonly inviteService: InviteService
   ) {}
 
   ngOnInit(): void {
@@ -67,6 +70,7 @@ export class EventDetailComponent implements OnInit {
           }
           this.event = event;
           this.getActivity(eventId);
+          this.getGuestList(eventId);
         },
         error: (err) => {
           if (err.status === 404) {
@@ -88,10 +92,25 @@ export class EventDetailComponent implements OnInit {
     });
   }
 
+  getGuestList(eventId: string) {
+    return this.inviteService.getInvitesByPartyId(eventId).subscribe({
+      next: (page: Page<Invite>) => {
+        this.guests = page.content;
+      },
+    });
+  }
+
+  getGuestsByStatus(status: InviteStatus): Invite[] {
+    return this.guests.filter((guest) => guest.status === status);
+  }
+
   rsvp(status: InviteStatus) {
     this.event.invite.status = status;
     // Here you would typically call a service to update the RSVP status in the backend
     console.log(`RSVP status updated to: ${status}`);
+    this.inviteService
+      .updateInviteStatus(this.event.invite.id, status)
+      .subscribe();
   }
 
   addComment({ target }: any) {

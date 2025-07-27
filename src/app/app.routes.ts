@@ -10,41 +10,50 @@ import { EventEditComponent } from './pages/event/event-edit/event-edit.componen
 export const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-  },
-  {
-    path: 'profile',
-    component: ProfileComponent,
-  },
-  {
-    path: 'notifications',
-    component: NotificationComponent,
-  },
-  {
-    path: 'event',
     children: [
       {
-        path: 'create',
-        component: EventCreateComponent,
+        path: '',
+        component: HomeComponent,
       },
       {
-        path: 'detail/:id',
-        component: EventDetailComponent,
+        path: 'profile',
+        component: ProfileComponent,
       },
       {
-        path: 'edit/:id',
-        component: EventEditComponent,
+        path: 'notifications',
+        component: NotificationComponent,
       },
       {
-        path: 'detail/:id/invite',
-        component: EventDetailInviteComponent,
-      },
-      {
-        path: '**',
-        redirectTo: '/',
-        pathMatch: 'full',
+        path: 'event',
+        children: [
+          {
+            path: 'create',
+            component: EventCreateComponent,
+          },
+          {
+            path: 'detail/:id',
+            component: EventDetailComponent,
+          },
+          {
+            path: 'edit/:id',
+            component: EventEditComponent,
+          },
+          {
+            path: 'detail/:id/invite',
+            component: EventDetailInviteComponent,
+          },
+          {
+            path: '**',
+            redirectTo: '/',
+            pathMatch: 'full',
+          },
+        ],
       },
     ],
+  },
+  {
+    path: 'public',
+    children: [],
   },
   {
     path: '**',
